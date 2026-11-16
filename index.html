@@ -17,7 +17,7 @@
     --line: #C9D1CC;
     --accent: #2B5D8A;
     --row-hover: #E3E8E4;
-    --glow: rgba(43, 93, 138, .08);
+    --glow: rgba(28, 42, 38, .30);
     --grid: rgba(28, 42, 38, .07);
     color-scheme: light;
   }
@@ -29,7 +29,7 @@
       --line: #2E3A36;
       --accent: #7FB0DB;
       --row-hover: #1D2623;
-      --glow: rgba(127, 176, 219, .09);
+      --glow: rgba(255, 255, 255, .20);
       --grid: rgba(228, 234, 230, .06);
       color-scheme: dark;
     }
@@ -41,7 +41,7 @@
     --line: #2E3A36;
     --accent: #7FB0DB;
     --row-hover: #1D2623;
-    --glow: rgba(127, 176, 219, .09);
+    --glow: rgba(255, 255, 255, .20);
     --grid: rgba(228, 234, 230, .06);
     color-scheme: dark;
   }
@@ -169,7 +169,11 @@
       if (user.bio) $("bio").textContent = user.bio;
       if (user.avatar_url) { $("avatar").src = user.avatar_url; $("avatar").hidden = false; }
 
-      repos = (await repoRes.json()).filter(r => !r.private && (SHOW_FORKS || !r.fork));
+      repos = (await repoRes.json()).filter(r =>
+        !r.private &&
+        !r.name.toLowerCase().endsWith(".github.io") &&   // skjul selve sidens repo
+        (SHOW_FORKS || !r.fork)
+      );
       const langs = [...new Set(repos.map(r => r.language).filter(Boolean))].sort();
       langs.forEach(l => $("lang").add(new Option(l, l)));
       render();
